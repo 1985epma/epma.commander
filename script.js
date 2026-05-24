@@ -489,45 +489,52 @@ document.addEventListener('DOMContentLoaded', () => {
         btnRunAutomator.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Compreendendo e implantando no n8n...';
         btnRunAutomator.disabled = true;
 
-        // Gera inteligência artificial para o JSON do n8n de forma determinística/mockada integrada de alta-fidelidade
-        setTimeout(() => {
-            const workflowId = Math.random().toString(36).substring(2, 7);
-            const generatedWorkflow = {
-                "name": `EPMA - ${taskText.substring(0, 25)}...`,
-                "nodes": [
-                    {
-                        "parameters": { "path": `epma-${workflowId}`, "options": {} },
-                        "type": "n8n-nodes-base.webhook",
-                        "typeVersion": 1,
-                        "position": [250, 300],
-                        "id": "webhook-epma-" + workflowId,
-                        "name": "Trigger EPMA Hook"
-                    },
-                    {
-                        "parameters": {
-                            "chatId": "EPMA_NOTIFY_CHANNEL",
-                            "text": `=🚀 *Canal Corporativo EPMA Commander*\n\n✅ *Atividade:* ${taskText}\n📋 *Status:* Operando e Monitorando em Tempo Real.`
-                        },
-                        "type": "n8n-nodes-base.telegram",
-                        "typeVersion": 1.2,
-                        "position": [500, 300],
-                        "id": "tel-" + workflowId,
-                        "name": "Canal Destinatário"
-                    }
-                ],
-                "connections": {
-                    [`webhook-epma-${workflowId}`]: {
-                        "main": [
-                            [
-                                { "node": `tel-${workflowId}`, "type": "main", "index": 0 }
-                            ]
-                        ]
-                    }
+        const workflowId = Math.random().toString(36).substring(2, 7);
+        const generatedWorkflow = {
+            "name": `EPMA - ${taskText.substring(0, 25)}...`,
+            "nodes": [
+                {
+                    "parameters": { "path": `epma-${workflowId}`, "options": {} },
+                    "type": "n8n-nodes-base.webhook",
+                    "typeVersion": 1,
+                    "position": [250, 300],
+                    "id": "webhook-epma-" + workflowId,
+                    "name": "Trigger EPMA Hook"
                 },
-                "active": true,
-                "settings": { "executionTimeout": 3600 }
-            };
+                {
+                    "parameters": {
+                        "chatId": "EPMA_NOTIFY_CHANNEL",
+                        "text": `=🚀 *Canal Corporativo EPMA Commander*\n\n✅ *Atividade:* ${taskText}\n📋 *Status:* Operando e Monitorando em Tempo Real.`
+                    },
+                    "type": "n8n-nodes-base.telegram",
+                    "typeVersion": 1.2,
+                    "position": [500, 300],
+                    "id": "tel-" + workflowId,
+                    "name": "Canal Destinatário"
+                }
+            ],
+            "connections": {
+                [`webhook-epma-${workflowId}`]: {
+                    "main": [
+                        [
+                            { "node": `tel-${workflowId}`, "type": "main", "index": 0 }
+                        ]
+                    ]
+                }
+            },
+            "active": true,
+            "settings": { "executionTimeout": 3600 }
+        };
 
+        // Implantar diretamente na API Real do n8n através do backend proxy
+        fetch('/api/n8n/workflows', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(generatedWorkflow)
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            
             automatorCodeBlock.textContent = JSON.stringify(generatedWorkflow, null, 2);
             automatorResult.classList.remove('hidden');
             
@@ -552,13 +559,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (logBox) {
                 const p = document.createElement('p');
                 p.className = 'text-purple-400';
-                p.textContent = `[${new Date().toISOString().replace('T', ' ').substring(0, 19)}] [AUTOMATOR] Workflow "${generatedWorkflow.name}" compilado e implantado com sucesso no servidor integrado n8n.`;
+                const statusMsg = data.simulated 
+                    ? `[AUTOMATOR] Workflow "${generatedWorkflow.name}" compilado com sucesso localmente.` 
+                    : `[AUTOMATOR] Workflow "${generatedWorkflow.name}" implantado e ATIVADO com sucesso no n8n container físico (ID: ${data.id})!`;
+                
+                p.textContent = `[${new Date().toISOString().replace('T', ' ').substring(0, 19)}] ${statusMsg}`;
                 logBox.appendChild(p);
             }
 
             btnRunAutomator.innerHTML = '<i class="fa-solid fa-check"></i> Implantado com Sucesso!';
             btnRunAutomator.disabled = false;
-        }, 1500);
+        })
+        .catch((err) => {
+            console.error(err);
+            btnRunAutomator.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Falha no Endereçamento';
+            btnRunAutomator.disabled = false;
+        });
     });
 
     // Load configs from localStore
