@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - EPMA Commander</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#131118',
+                        darkForm: '#1a1625',
+                        brandPurple: '#8b5cf6',
+                        brandIndigo: '#6366f1'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes flowGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #1e112a, #14111f, #0d0f1a, #0a1122);
+            background-size: 400% 400%;
+            animation: flowGradient 15s ease infinite;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen flex items-center justify-center p-4 selection:bg-purple-500/30 selection:text-purple-200">
+
+    <!-- Login Container -->
+    <div class="w-full max-w-md bg-white dark:bg-darkForm rounded-3xl shadow-2xl border border-gray-100 dark:border-purple-900/20 overflow-hidden relative transition-all duration-300">
+        
+        <!-- Top branding border style -->
+        <div class="h-1.5 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500"></div>
+
+        <div class="p-8">
+            <!-- Logo Section -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 via-indigo-500 to-blue-500 flex items-center justify-center text-white text-xl font-black mb-3 shadow-[0_8px_30px_rgb(99,102,241,0.3)]">
+                    EC
+                </div>
+                <h1 class="text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">EPMA Commander</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Acesso unificado e seguro corporativo</p>
+                <div class="flex items-center space-x-1.5 mt-2.5">
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-gray-100 dark:bg-purple-950/40 text-gray-600 dark:text-purple-300 border border-gray-200 dark:border-purple-900/35 leading-none">
+                        <i class="fa-solid fa-cloud mr-1"></i> sg.epma.cloud SSO
+                    </span>
+                </div>
+            </div>
+
+            <!-- Login Form block -->
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-wider">Identificador ou E-mail corporativo</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-purple-400/70">
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <input type="email" required id="login-email" placeholder="usuario@epma.com" class="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-gray-800 dark:text-gray-200" />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Senha de Segurança</label>
+                        <a href="#" class="text-[11px] font-semibold text-indigo-500 hover:text-indigo-400 transition-colors">Esqueceu?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-purple-400/70">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" required id="login-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-gray-800 dark:text-gray-200" />
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 text-white font-semibold text-sm rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-indigo-500/10 flex items-center justify-center gap-2 cursor-pointer">
+                    <span>Entrar no Commander</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+
+            <!-- SSO / Passkey Divider -->
+            <div class="relative flex items-center justify-center my-6">
+                <div class="absolute inset-x-0 h-px bg-gray-200 dark:bg-purple-950/20"></div>
+                <span class="relative px-3 text-[10px] font-bold uppercase tracking-widest bg-white dark:bg-darkForm text-gray-400 dark:text-purple-400">Ou use formas rápidas</span>
+            </div>
+
+            <!-- SSO e Passkey Grid -->
+            <div class="space-y-3">
+                <!-- Passkey Authentication Button -->
+                <button id="btn-passkey" class="w-full flex items-center justify-between px-4 py-3.5 bg-indigo-50 hover:bg-indigo-100/70 dark:bg-purple-950/20 dark:hover:bg-purple-950/45 border border-indigo-100 dark:border-purple-900/25 rounded-2xl text-xs font-semibold text-indigo-700 dark:text-purple-300 transition-all group">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-key text-sm text-indigo-600 dark:text-purple-400"></i>
+                        <span>Acessar com Passkey (Biometria)</span>
+                    </span>
+                    <span class="inline-flex px-1.5 py-0.5 text-[9px] bg-indigo-200/50 dark:bg-purple-900/50 text-indigo-800 dark:text-purple-200 rounded font-bold uppercase leading-none select-none">Rápido</span>
+                </button>
+
+                <!-- SSO Button -->
+                <button id="btn-sso" class="w-full flex items-center justify-between px-4 py-3.5 bg-gray-50 hover:bg-gray-100 dark:bg-purple-950/10 dark:hover:bg-purple-950/25 border border-gray-200 dark:border-purple-900/15 rounded-2xl text-xs font-semibold text-gray-700 dark:text-gray-300 transition-all">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-shield-halved text-sm text-blue-500"></i>
+                        <span>Acessar com Single Sign-On (SSO)</span>
+                    </span>
+                    <i class="fa-solid fa-angle-right text-gray-400 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+
+            <!-- Footer links -->
+            <p class="text-center font-normal text-[11px] text-gray-400 dark:text-purple-400/50 mt-8 leading-relaxed">
+                Protegido por políticas de conformidade do <span class="text-indigo-500 font-semibold">sg.epma.cloud</span>.<br/>
+                Conexões criptografadas de ponta a ponta.
+            </p>
+        </div>
+    </div>
+
+    <!-- Passkey Activation Simulation Overlay / Modal -->
+    <div id="passkey-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gray-950 text-white w-full max-w-xs p-6 rounded-3xl shadow-2xl border border-white/10 text-center transform scale-95 transition-transform duration-300">
+            <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 text-purple-400 relative">
+                <i class="fa-solid fa-fingerprint text-3xl animate-pulse"></i>
+                <div class="absolute -inset-0.5 bg-purple-500/20 rounded-full blur animate-ping"></div>
+            </div>
+            <h4 class="font-bold text-base leading-tight">EPMA Commander Security</h4>
+            <p class="text-xs text-gray-400 mt-2">Toque no seu leitor de biometria ou use o Face ID do dispositivo para autenticar operando com chaves corporativas.</p>
+            
+            <div class="mt-6 pt-4 border-t border-white/5 flex flex-col space-y-2">
+                <button id="btn-passkey-simulate" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 rounded-xl text-xs font-semibold transition-colors">Simular Sucesso</button>
+                <button id="btn-passkey-cancel" class="w-full py-2.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-xl text-xs font-semibold transition-colors">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const btnPasskey = document.getElementById('btn-passkey');
+        const btnSso = document.getElementById('btn-sso');
+        
+        const passkeyOverlay = document.getElementById('passkey-overlay');
+        const btnPasskeySimulate = document.getElementById('btn-passkey-simulate');
+        const btnPasskeyCancel = document.getElementById('btn-passkey-cancel');
+
+        // Form submit handler
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Ir para o chat Commander
+            window.location.href = 'index.html';
+        });
+
+        // SSO Action handler
+        btnSso.addEventListener('click', () => {
+            alert('Redirecionando com segurança para a central de autorizações do sg.epma.cloud SSO...');
+            window.location.href = 'index.html';
+        });
+
+        // Passkey dialog simulation
+        btnPasskey.addEventListener('click', () => {
+            passkeyOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                passkeyOverlay.classList.remove('opacity-0');
+                passkeyOverlay.querySelector('.transform').classList.remove('scale-95');
+            }, 10);
+        });
+
+        const dismissPasskey = () => {
+            passkeyOverlay.classList.add('opacity-0');
+            passkeyOverlay.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                passkeyOverlay.classList.add('hidden');
+            }, 300);
+        };
+
+        btnPasskeyCancel.addEventListener('click', dismissPasskey);
+        
+        btnPasskeySimulate.addEventListener('click', () => {
+            dismissPasskey();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+/* Custom Core Scrollbar Styles */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.25);
+    border-radius: 9999px;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.15);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.45);
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 58, 237, 0.35);
+}
+
+/* Scrollbar styling for entire pages / chat windows */
+#chat-window::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-window::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chat-window::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.15);
+    border-radius: 9999px;
+}
+
+.dark #chat-window::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+#chat-window::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.35);
+}
+
+.dark #chat-window::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.25);
+}
+
+/* Gemini Skeleton Pulse Loading Animation */
+@keyframes pulseGlow {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.skeleton-pulse {
+    background: linear-gradient(90deg, 
+        rgba(139, 92, 246, 0.1) 25%, 
+        rgba(99, 102, 241, 0.25) 50%, 
+        rgba(139, 92, 246, 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: pulseGlow 1.8s infinite linear;
+}
+
+.dark .skeleton-pulse {
+    background: linear-gradient(90deg, 
+        rgba(46, 35, 73, 0.6) 25%, 
+        rgba(76, 45, 120, 0.8) 50%, 
+        rgba(46, 35, 73, 0.6) 75%
+    );
+    background-size: 200% 100%;
+    animation: pulseGlow 1.8s infinite linear;
+}
+
+/* Gradient text animations */
+@keyframes gradientText {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-gradient-text {
+    animation: gradientText 6s ease infinite;
+}
+
+/* Chat bubble styling and transitions */
+.message-bubble {
+    animation: slideInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Typing Indicator Animation */
+.dot-flashing {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: #6366f1;
+    animation: dot-flashing 1s infinite linear alternate;
+    animation-delay: .5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+}
+.dot-flashing::before {
+    left: -12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: #6366f1;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 0s;
+}
+.dot-flashing::after {
+    left: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: #6366f1;
+    animation: dot-flashing 1s infinite alternate;
+    animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+    0% {
+        background-color: #6366f1;
+    }
+    50%, 100% {
+        background-color: rgba(99, 102, 241, 0.2);
+    }
+}
+
+.dark .dot-flashing {
+    background-color: #a855f7;
+    color: #a855f7;
+}
+
+.dark .dot-flashing::before, .dark .dot-flashing::after {
+    background-color: #a855f7;
+    color: #a855f7;
+}
+
+.dark @keyframes dot-flashing {
+    0% {
+        background-color: #a855f7;
+    }
+    50%, 100% {
+        background-color: rgba(168, 85, 247, 0.25);
+    }
+}
+
+/* Suggestion cards zoom behavior */
+.card-suggest:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.dark .card-suggest:hover {
+    border-color: rgba(168, 85, 247, 0.25);
+}
+
+/* Rich text styled formats inside the chatbot bubbles */
+.prose {
+    line-height: 1.7;
+    font-size: 15.5px;
+}
+
+.prose p {
+    margin-bottom: 0.85em;
+}
+
+.prose p:last-child {
+    margin-bottom: 0px;
+}
+
+.prose ul, .prose ol {
+    margin-top: 0.5em;
+    margin-bottom: 0.85em;
+    padding-left: 1.5em;
+}
+
+.prose ul {
+    list-style-type: disc;
+}
+
+.prose ol {
+    list-style-type: decimal;
+}
+
+.prose li {
+    margin-bottom: 0.3em;
+}
+
+.prose strong {
+    font-weight: 600;
+}
+
+/* Code blocks style elements */
+.prose pre {
+    background-color: #f7f9fa;
+    border: 1px solid #e1e4e6;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+}
+
+.dark .prose pre {
+    background-color: #14111f;
+    border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.prose code {
+    background-color: rgba(168, 85, 247, 0.08);
+    color: #4f46e5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.dark .prose code {
+    background-color: rgba(139, 92, 246, 0.15);
+    color: #c084fc;
+}
+
+.prose pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0px;
+    border-radius: 0px;
+    font-size: inherit;
+}
+
+.prose a {
+    color: #4353ff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.dark .prose a {
+    color: #a855f7;
+}
+
+/* Sidebar sliding states responsiveness */
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    #sidebar.sidebar-open {
+        left: 0;
+    }
+    
+    #open-sidebar {
+        display: flex;
+    }
+}
