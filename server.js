@@ -16,16 +16,24 @@ app.use(express.static(path.join(__dirname)));
 app.post('/api/chat', async (req, res) => {
     try {
         const { messages, systemPrompt, model } = req.body;
-        const apiKey = process.env.NOVITA_API_KEY;
+        
+        // Se o cliente enviar uma chave própria via headers, ela terá prioridade
+        let apiKey = req.headers['x-user-api-key'] || process.env.NOVITA_API_KEY;
 
         if (!apiKey || apiKey === 'sua_chave_da_novita_ai_aqui') {
             return res.status(401).json({
-                error: 'Para usar a Novita AI, adicione sua chave de API real no arquivo .env como NOVITA_API_KEY=sua_chave'
+                error: 'Para usar a Novita AI, adicione sua chave de API real no arquivo .env como NOVITA_API_KEY=sua_chave ou configure uma em Configurações (ícone de engrenagem) se preferir.'
             });
         }
 
-        const activeModel = model || 'meta-llama/llama-3-8b-instruct';
+        const activeModel = model || 'meta-llama/llama-3.1-8b-instruct';
         const activeSystemPrompt = systemPrompt || 'Você é o EPMA Commander, um assistente virtual ultra-inteligente, especializado em engenharia, automação operacional, desenvolvimento de software e telemetria. Responda em português de modo prestativo, profissional e técnico.';
+
+        // Mapeia o papel 'ai' para o papel padrão 'assistant' aceito pela OpenAI/Novita AI
+        const sanitizedMessages = messages.map(msg => ({
+            role: msg.role === 'ai' ? 'assistant' : msg.role,
+            content: msg.content
+        }));
 
         // Novita AI utiliza o padrão compatível com a biblioteca do OpenAI
         const response = await fetch('https://api.novita.ai/v3/openai/v1/chat/completions', {
@@ -41,7 +49,7 @@ app.post('/api/chat', async (req, res) => {
                         role: 'system',
                         content: activeSystemPrompt
                     },
-                    ...messages
+                    ...sanitizedMessages
                 ],
                 stream: false
             })

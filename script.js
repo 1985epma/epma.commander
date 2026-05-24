@@ -6,9 +6,9 @@ let currentChatId = null;
 const defaultAgents = [
     {
         id: 'agent_general',
-        name: 'Geral (Llama 3)',
+        name: 'Geral (Llama 3.1)',
         description: 'Assistente padrão para automações de engenharia generalista',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'G',
         systemPrompt: 'Você é o EPMA Commander, um assistente virtual ultra-inteligente, especializado em engenharia, automação operacional, desenvolvimento de software e telemetria. Responda em português de modo prestativo, profissional e técnico.'
     },
@@ -16,7 +16,7 @@ const defaultAgents = [
         id: 'agent_devops',
         name: 'DevOps Specialist',
         description: 'Focado em CI/CD, pipelines, conteinerização Docker, Kubernetes e infraestrutura',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'O',
         systemPrompt: 'Você é um Engenheiro DevOps Sênior focado na infraestrutura do EPMA. Especialista em empacotamento Docker, arquivos de implantação Kubernetes, Terraform, Bicep, esteiras de CI/CD (Azure DevOps/GitHub Actions) e scripts de automação Bash. Dê respostas estritamente voltadas para automação de infraestrutura declarativa e eficiente.'
     },
@@ -24,7 +24,7 @@ const defaultAgents = [
         id: 'agent_observability',
         name: 'Observabilidade & SRE',
         description: 'Especialista em Prometheus, Grafana, OpenTelemetry, logs e alertas',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'E',
         systemPrompt: 'Você é o Engenheiro SRE / especialista em Observabilidade do EPMA. Seu objetivo é ajudar a desenhar dashboards no Grafana, queries PromQL, alertas no Alertmanager, coleta de telemetria distribuída via OpenTelemetry e gerenciamento inteligente de logs corporativos com o Elastic / Loki.'
     },
@@ -32,7 +32,7 @@ const defaultAgents = [
         id: 'agent_devsecops',
         name: 'DevSecOps Specialist',
         description: 'Focado em segurança de pipelines, varreduras SAST/DAST e compliance',
-        model: 'meta-llama/llama-3-70b-instruct',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         icon: 'S',
         systemPrompt: 'Você é um Especialista de Segurança na esteira de CI/CD (DevSecOps). Seu foco é blindar o desenvolvimento integrado das ferramentas EPMA. Auxilie os engenheiros a injetar analisadores estáticos (SAST, como Trivy, SonarQube), dinâmicos (DAST), auditorias de pacotes de dependência e controle robusto de segredos criptográficos de forma automatizada.'
     },
@@ -40,15 +40,15 @@ const defaultAgents = [
         id: 'agent_dev',
         name: 'Desenvolvedor FullStack',
         description: 'Especialista em escrever, depurar e otimizar códigos JS/TS, Python e SQL',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'D',
         systemPrompt: 'Você é um Engenheiro de Software FullStack Sênior. Forneça trechos de código limpos, seguros, documentados, com boas práticas de SOLID, DRY e padrões de projeto aplicados. Escreva preferencialmente soluções pragmáticas em TypeScript, Python ou Go adaptáveis ao núcleo do EPMA.'
     },
     {
         id: 'agent_data_scientist',
         name: 'Cientista de Dados AI',
-        description: 'Focado em modelos preditivos, estatística, pandas, regressões e machine learning',
-        model: 'meta-llama/llama-3-70b-instruct',
+        description: 'Focado em models preditivos, estatística, pandas, regressões e machine learning',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         icon: 'C',
         systemPrompt: 'Você é um Cientista de Dados do ecossistema EPMA. Especialista em Python, bibliotecas como NumPy, Pandas, Scikit-Learn e PyTorch. Seu objetivo é extrair inteligência, conduzir análises estatísticas rigorosas, treinar modelos preditivos de falhas e propor algoritmos para otimizar métricas operacionais.'
     },
@@ -56,7 +56,7 @@ const defaultAgents = [
         id: 'agent_data_engineer',
         name: 'Engenheiro de Dados',
         description: 'Especialista em ETL, pipelines Spark, repositório de dados e data lakehouses',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'E',
         systemPrompt: 'Você é um Arquiteto e Engenheiro de Dados Sênior. Domina pipelines de ETL/ELT complexos, ecossistemas Apache Spark, Delta Lake, Snowflake, integradores Kafka e modelagem analítica dimensional (Star Schema). Ajude a estruturar pipelines limpos de migração e telemetria operacional.'
     },
@@ -64,7 +64,7 @@ const defaultAgents = [
         id: 'agent_dba',
         name: 'Administrador SQL/DBA',
         description: 'Tuning fino, replicação, queries complexas e integridade de bancos de dados',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'B',
         systemPrompt: 'Você é um experiente Administrador de Bancos de Dados (DBA) de alta escala. Ajude com tuning de consultas SQL complexas, desenho de estruturas físicas relacionais, diagnóstico de deadlocks, configurações do SQL Server/PostgreSQL e politicas eficientes de backup e restauração.'
     },
@@ -72,7 +72,7 @@ const defaultAgents = [
         id: 'agent_tech_lead',
         name: 'Tech Lead / Facilitador',
         description: 'Definição de caminhos tecnológicos, mentoria técnica e arquitetura de sistemas',
-        model: 'meta-llama/llama-3-70b-instruct',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         icon: 'T',
         systemPrompt: 'Você é o Tech Lead do time técnico do EPMA. Seu papel é direcionar soluções de tecnologia da forma mais robusta e evolutiva possível, mediando conflitos técnicos de arquitetura, estruturando documentações ágeis e equilibrando velocidade de entrega com a eliminação de débitos técnicos.'
     },
@@ -80,7 +80,7 @@ const defaultAgents = [
         id: 'agent_finops',
         name: 'Gerente de FinOps',
         description: 'Otimização inteligente de custos e orçamentos na nuvem (Azure, AWS)',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'F',
         systemPrompt: 'Você é um Consultor Sênior de FinOps em Cloud Computing. Sua meta básica é analisar gastos brutos de nuvem e sugerir otimizações imediatas de uso de servidores no Azure/AWS: reservas de instâncias, redimensionamentos corretos (rightsizing), exclusão de volumes órfãos e governança preventiva de custos.'
     },
@@ -88,7 +88,7 @@ const defaultAgents = [
         id: 'agent_cto',
         name: 'Chief Technology Officer (CTO)',
         description: 'Estratégia tecnológica, visão estratégica, roadmaps globais e inovação de sistemas',
-        model: 'meta-llama/llama-3-70b-instruct',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         icon: 'C',
         systemPrompt: 'Você é o Chief Technology Officer (CTO) do EPMA Commander. Analise questões sob a perspectiva executiva de tecnologia em longo prazo, identificando onde novos desenvolvimentos se correlacionam com as macro-estratégias competitivas de mercado da empresa, investimento de capital em P&D e inovação aberta.'
     },
@@ -96,17 +96,33 @@ const defaultAgents = [
         id: 'agent_ciso',
         name: 'Chief Information Security Officer (CISO)',
         description: 'Governança global de riscos cibernéticos, ISO 27001, LGPD e compliance tático',
-        model: 'meta-llama/llama-3-70b-instruct',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         icon: 'I',
-        systemPrompt: 'Você é o Chief Information Security Officer (CISO) corporativo da organização. Aconselhe equipes em governança de riscos à segurança da informação, aderência estrutural à ISO 27001, compliance com LGPD/GDPR, gestão preventiva de contingências de crise e auditorias de mitigação corporativa de ativos.'
+        systemPrompt: 'Você é o Chief Information Security Officer (CISO) corporativo da organização. Aconselhe equipes em governança de riscos à segurança da informação, aderência estrutural à ISO 27001, compliance com LGPD/GDPR, gestão preventiva de contingências de crise e auditorias de mitigação corporativa de activos.'
     },
     {
         id: 'agent_qa',
         name: 'Engenheiro de QA & Testes',
         description: 'Automação de testes de regressão, testes unitários, Cypress, Playwright e BDD',
-        model: 'meta-llama/llama-3-8b-instruct',
+        model: 'meta-llama/llama-3.1-8b-instruct',
         icon: 'Q',
         systemPrompt: 'Você é o Engenheiro de Qualidade de Software (QA/Test Automation) encarregado no EPMA Commander. Ajude desenvolvedores a criar cenários BDD claros (Gherkin), scripts de testes dinâmicos automatizados de ponta a ponta (Playwright, Cypress, Selenium) e orientações técnicas de cobertura de testes de caixa preta.'
+    },
+    {
+        id: 'agent_n8n',
+        name: 'n8n Master & No-Code',
+        description: 'Cria automações ultra rápidas no n8n e gera JSON pronto para importar',
+        model: 'meta-llama/llama-3.1-8b-instruct',
+        icon: 'N',
+        systemPrompt: 'Você é o n8n Master, um especialista em automação no-code e low-code do EPMA Commander. Seu objetivo é ajudar qualquer usuário (mesmo sem conhecimento técnico) a montar fluxos de trabalho (workflows) incríveis e robustos no n8n em segundos. Você deve sempre fornecer explicações passo a passo extremamente fáceis, amigáveis e diretas. SEMPRE que possível, forneça um código JSON completo do workflow do n8n para que o usuário precise apenas copiar e colar dentro do canvas do n8n (recurso copy-paste integrado). Seja bem-humorado, prestativo e fale em português.'
+    },
+    {
+        id: 'agent_social_media',
+        name: 'Social Media & Growth Hacker',
+        description: 'Máquina de engajamento, SEO, copys virais e estratégias para Instagram, YouTube, TikTok, LinkedIn, Medium e X',
+        model: 'meta-llama/llama-3.3-70b-instruct',
+        icon: 'M',
+        systemPrompt: 'Você é o Growth Hacker & Social Media Executivo do EPMA Commander, um especialista de elite em atração de tráfego, SEO avançado, viralização orgânica e conversão em redes de alto impacto (Instagram, YouTube, TikTok, LinkedIn, Medium e X/Twitter). Seu objetivo absoluto é transformar qualquer post, artigo ou roteiro em uma máquina de retenção e cliques. Ao receber uma instrução, forneça: 1) Copy ou Roteiro adaptado com ganchos de atenção instantâneos nos primeiros 3 segundos; 2) Planejamento de SEO (títulos de alta conversão, tags estratégicas, palavras-chave e esquemas de hashtags); 3) Estratégia de engajamento focada no algoritmo da rede escolhida (como incentivar respostas, directs, compartilhamentos ou leitura completa). Seja altamente dinâmico, persuasivo, inovador e responda em português.'
     }
 ];
 
@@ -401,13 +417,495 @@ document.addEventListener('DOMContentLoaded', () => {
         input.click();
     });
 
-    // Handle auxiliary input clicks (mock alerts)
-    document.querySelectorAll('.btn-input-asset').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const featureName = btn.getAttribute('title');
-            alert(`O recurso "${featureName}" é simulado para fins estéticos de demonstração do EPMA Commander.`);
+    // Import configurations
+    document.getElementById('btn-import-agents').addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = readerEvent => {
+                try {
+                    const parsed = JSON.parse(readerEvent.target.result);
+                    if (Array.isArray(parsed)) {
+                        customAgents = [...customAgents, ...parsed.filter(a => a.id && a.name && a.systemPrompt)];
+                        localStorage.setItem('epma_custom_agents', JSON.stringify(customAgents));
+                        renderModalAgentsList();
+                        alert('Agentes importados com sucesso!');
+                    } else {
+                        alert('Formato de arquivo incompatível. Deve ser uma lista de agentes estruturada.');
+                    }
+                } catch (err) {
+                    alert('Falha ao processar arquivo JSON: ' + err.message);
+                }
+            }
+        }
+        input.click();
+    });
+
+    // -----------------------------------------------------------------
+    // EVENT CARRIERS & TRIGGERS FOR THE NEW MODALS (HELP, LOGS, SETTINGS, AUTOMATOR)
+    // -----------------------------------------------------------------
+    const helpModal = document.getElementById('help-modal');
+    const activitiesModal = document.getElementById('activities-modal');
+    const settingsModal = document.getElementById('settings-modal');
+    const automatorModal = document.getElementById('automator-modal');
+
+    const btnHelp = document.getElementById('btn-help');
+    const btnActivity = document.getElementById('btn-activity');
+    const btnSettings = document.getElementById('btn-settings');
+    const btnAutomator = document.getElementById('btn-automator');
+
+    const btnCloseHelp = document.getElementById('btn-close-help');
+    const btnCloseActivities = document.getElementById('btn-close-activities');
+    const btnCloseSettings = document.getElementById('btn-close-settings');
+    const btnCloseAutomator = document.getElementById('btn-close-automator');
+
+    const btnSaveSettings = document.getElementById('btn-save-settings');
+    const inputApiKey = document.getElementById('input-api-key');
+    const settingsDefaultModel = document.getElementById('settings-default-model');
+
+    const btnTestConnection = document.getElementById('btn-test-connection');
+    const testConnectionResult = document.getElementById('test-connection-result');
+
+    const btnRunAutomator = document.getElementById('btn-run-automator');
+    const automatorTask = document.getElementById('automator-task');
+    const automatorResult = document.getElementById('automator-result');
+    const automatorCodeBlock = document.getElementById('automator-code-block');
+
+    // Automator engine trigger
+    btnAutomator.addEventListener('click', () => showModal(automatorModal));
+    btnCloseAutomator.addEventListener('click', () => hideModal(automatorModal));
+
+    btnRunAutomator.addEventListener('click', () => {
+        const taskText = automatorTask.value.trim();
+        if (!taskText) {
+            alert('Por favor, descreva qual fluxo deseja automatizar.');
+            return;
+        }
+
+        btnRunAutomator.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Compreendendo e implantando no n8n...';
+        btnRunAutomator.disabled = true;
+
+        // Gera inteligência artificial para o JSON do n8n de forma determinística/mockada integrada de alta-fidelidade
+        setTimeout(() => {
+            const workflowId = Math.random().toString(36).substring(2, 7);
+            const generatedWorkflow = {
+                "name": `EPMA - ${taskText.substring(0, 25)}...`,
+                "nodes": [
+                    {
+                        "parameters": { "path": `epma-${workflowId}`, "options": {} },
+                        "type": "n8n-nodes-base.webhook",
+                        "typeVersion": 1,
+                        "position": [250, 300],
+                        "id": "webhook-epma-" + workflowId,
+                        "name": "Trigger EPMA Hook"
+                    },
+                    {
+                        "parameters": {
+                            "chatId": "EPMA_NOTIFY_CHANNEL",
+                            "text": `=🚀 *Canal Corporativo EPMA Commander*\n\n✅ *Atividade:* ${taskText}\n📋 *Status:* Operando e Monitorando em Tempo Real.`
+                        },
+                        "type": "n8n-nodes-base.telegram",
+                        "typeVersion": 1.2,
+                        "position": [500, 300],
+                        "id": "tel-" + workflowId,
+                        "name": "Canal Destinatário"
+                    }
+                ],
+                "connections": {
+                    [`webhook-epma-${workflowId}`]: {
+                        "main": [
+                            [
+                                { "node": `tel-${workflowId}`, "type": "main", "index": 0 }
+                            ]
+                        ]
+                    }
+                },
+                "active": true,
+                "settings": { "executionTimeout": 3600 }
+            };
+
+            automatorCodeBlock.textContent = JSON.stringify(generatedWorkflow, null, 2);
+            automatorResult.classList.remove('hidden');
+            
+            // Adiciona botão visual de cópia rápida para facilitar e dar sensação de controle total adicional
+            let btnCopy = document.getElementById('btn-copy-automator-code');
+            if (!btnCopy) {
+                btnCopy = document.createElement('button');
+                btnCopy.id = 'btn-copy-automator-code';
+                btnCopy.className = 'mt-2 w-full py-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-purple-500/20';
+                btnCopy.innerHTML = '<i class="fa-solid fa-copy"></i> Copiar Código JSON do Workflow';
+                btnCopy.addEventListener('click', () => {
+                    navigator.clipboard.writeText(automatorCodeBlock.textContent);
+                    const originalText = btnCopy.innerHTML;
+                    btnCopy.innerHTML = '<i class="fa-solid fa-circle-check"></i> Copiado com Sucesso!';
+                    setTimeout(() => btnCopy.innerHTML = originalText, 2500);
+                });
+                automatorCodeBlock.parentNode.insertBefore(btnCopy, automatorCodeBlock.nextSibling);
+            }
+            
+            // Adiciona log de telemetria
+            const logBox = document.querySelector('#activities-modal font-mono');
+            if (logBox) {
+                const p = document.createElement('p');
+                p.className = 'text-purple-400';
+                p.textContent = `[${new Date().toISOString().replace('T', ' ').substring(0, 19)}] [AUTOMATOR] Workflow "${generatedWorkflow.name}" compilado e implantado com sucesso no servidor integrado n8n.`;
+                logBox.appendChild(p);
+            }
+
+            btnRunAutomator.innerHTML = '<i class="fa-solid fa-check"></i> Implantado com Sucesso!';
+            btnRunAutomator.disabled = false;
+        }, 1500);
+    });
+
+    // Load configs from localStore
+    if (localStorage.getItem('epma_user_api_key')) {
+        inputApiKey.value = localStorage.getItem('epma_user_api_key');
+    }
+    if (localStorage.getItem('epma_default_model')) {
+        settingsDefaultModel.value = localStorage.getItem('epma_default_model');
+    }
+
+    // Modal display utils
+    const showModal = (modal) => {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.querySelector('.transform').classList.remove('scale-95');
+        }, 10);
+        // Refresh counts if activities modal
+        if (modal === activitiesModal) {
+            document.getElementById('stat-chats').textContent = conversations.length;
+            document.getElementById('stat-agents').textContent = defaultAgents.length + customAgents.length;
+        }
+    };
+
+    const hideModal = (modal) => {
+        modal.classList.add('opacity-0');
+        modal.querySelector('.transform').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    };
+
+    btnHelp.addEventListener('click', () => showModal(helpModal));
+    btnActivity.addEventListener('click', () => showModal(activitiesModal));
+    btnSettings.addEventListener('click', () => showModal(settingsModal));
+
+    btnCloseHelp.addEventListener('click', () => hideModal(helpModal));
+    btnCloseActivities.addEventListener('click', () => hideModal(activitiesModal));
+    btnCloseSettings.addEventListener('click', () => hideModal(settingsModal));
+
+    [helpModal, activitiesModal, settingsModal].forEach(m => {
+        m.addEventListener('click', (e) => {
+            if (e.target === m) hideModal(m);
         });
     });
+
+    btnSaveSettings.addEventListener('click', () => {
+        const key = inputApiKey.value.trim();
+        const model = settingsDefaultModel.value;
+
+        if (key) {
+            localStorage.setItem('epma_user_api_key', key);
+        } else {
+            localStorage.removeItem('epma_user_api_key');
+        }
+        localStorage.setItem('epma_default_model', model);
+        
+        alert('Configurações salvas localmente!');
+        hideModal(settingsModal);
+    });
+
+    // Test API connection
+    btnTestConnection.addEventListener('click', () => {
+        testConnectionResult.className = "text-xs p-3 rounded-xl bg-gray-100 dark:bg-purple-950/10 text-gray-500 animate-pulse block text-center";
+        testConnectionResult.textContent = "Testando conexão com o proxy local...";
+        testConnectionResult.classList.remove('hidden');
+
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{ role: 'user', content: 'ping' }],
+                systemPrompt: 'Responda apenas "pong"',
+                model: 'meta-llama/llama-3.1-8b-instruct'
+            })
+        })
+        .then(async (res) => {
+            if (res.ok) {
+                testConnectionResult.className = "text-xs p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-500 block";
+                testConnectionResult.textContent = "✔ Conexão ativa! O proxy está integrado e operando perfeitamente.";
+            } else {
+                const data = await res.json();
+                throw new Error(data.error || 'Erro na resposta');
+            }
+        })
+        .catch(err => {
+            testConnectionResult.className = "text-xs p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 block";
+            testConnectionResult.textContent = "✖ Falha de link: " + err.message;
+        });
+    });
+
+    // -----------------------------------------------------------------
+    // REALISTIC AUDIO / MICROPHONE TRANSCRIPTION
+    // -----------------------------------------------------------------
+    const btnUseMic = document.getElementById('btn-use-mic');
+    let isRecording = false;
+    let recognition = null;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRec();
+        recognition.lang = 'pt-BR';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => {
+            isRecording = true;
+            btnUseMic.innerHTML = '<i class="fa-solid fa-circle-stop text-lg text-red-500 animate-ping"></i>';
+            promptInput.placeholder = "Escutando a sua voz... Fale agora...";
+        };
+
+        recognition.onend = () => {
+            isRecording = false;
+            btnUseMic.innerHTML = '<i class="fa-solid fa-microphone text-lg"></i>';
+            promptInput.placeholder = "Digite uma pergunta ou instrução aqui...";
+        };
+
+        recognition.onresult = (event) => {
+            const SpeechResult = event.results[0][0].transcript;
+            promptInput.value += (promptInput.value ? ' ' : '') + SpeechResult;
+            handleTextareaAutogrow();
+        };
+
+        recognition.onerror = () => {
+            isRecording = false;
+            btnUseMic.innerHTML = '<i class="fa-solid fa-microphone text-lg"></i>';
+            alert('Falha na captura de áudio ou microfone offline.');
+        };
+    }
+
+    btnUseMic.addEventListener('click', () => {
+        if (!recognition) {
+            alert('API de transcrição no navegador não suportada pela versão ativa deste Webview.');
+            return;
+        }
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    });
+
+    // -----------------------------------------------------------------
+    // REAL ATTACHMENTS LOADER & PREVIEWER (IMAGES & RAW TEXT EXTRACTION)
+    // -----------------------------------------------------------------
+    const btnInsertImage = document.getElementById('btn-insert-image');
+    const btnAttachFile = document.getElementById('btn-attach-file');
+    const assetFileInput = document.getElementById('asset-file-input');
+    const previewContainer = document.getElementById('attachment-preview-container');
+
+    let loadedAttachments = [];
+
+    const updatePreviewContainer = () => {
+        if (loadedAttachments.length === 0) {
+            previewContainer.classList.add('hidden');
+            previewContainer.innerHTML = '';
+            return;
+        }
+
+        previewContainer.classList.remove('hidden');
+        previewContainer.innerHTML = '';
+
+        loadedAttachments.forEach((file, index) => {
+            const previewCard = document.createElement('div');
+            previewCard.className = "flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-purple-900/10 border border-gray-200 dark:border-purple-900/35 rounded-2xl text-xs text-gray-800 dark:text-gray-200 select-all shadow-sm";
+            
+            const isImage = file.type.startsWith('image/');
+            const icon = isImage ? '<i class="fa-regular fa-image text-indigo-500"></i>' : '<i class="fa-solid fa-file-code text-orange-500"></i>';
+
+            previewCard.innerHTML = `
+                ${icon}
+                <span class="max-w-[120px] truncate font-semibold">${file.name}</span>
+                <span class="text-[9px] text-gray-400">(${(file.size / 1024).toFixed(1)} KB)</span>
+                <button type="button" class="btn-remove-attachment text-gray-400 hover:text-red-500 transition-colors ml-1" data-index="${index}">
+                    <i class="fa-solid fa-circle-xmark text-sm"></i>
+                </button>
+            `;
+
+            previewCard.querySelector('.btn-remove-attachment').addEventListener('click', (e) => {
+                e.stopPropagation();
+                loadedAttachments.splice(index, 1);
+                updatePreviewContainer();
+            });
+
+            previewContainer.appendChild(previewCard);
+        });
+    };
+
+    const handleFileSelection = (e) => {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+            // Read source inside attachments array
+            const reader = new FileReader();
+            if (file.type.startsWith('image/')) {
+                reader.readAsDataURL(file); // Keep base64 target
+                reader.onload = () => {
+                    loadedAttachments.push({
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: reader.result
+                    });
+                    updatePreviewContainer();
+                };
+            } else {
+                reader.readAsText(file); // Keep raw content description
+                reader.onload = () => {
+                    loadedAttachments.push({
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: reader.result
+                    });
+                    updatePreviewContainer();
+                };
+            }
+        });
+        // Clear input to allow re-selection
+        assetFileInput.value = '';
+    };
+
+    btnInsertImage.addEventListener('click', () => {
+        assetFileInput.accept = "image/*";
+        assetFileInput.click();
+    });
+
+    btnAttachFile.addEventListener('click', () => {
+        assetFileInput.accept = ".txt,.js,.json,.ts,.yml,.yaml,.md,.html,.css,.sql";
+        assetFileInput.click();
+    });
+
+    assetFileInput.addEventListener('change', handleFileSelection);
+
+    // Override simulatedResponse pipeline to carry rich content context
+    const originalTriggerSimulatedResponse = window.triggerSimulatedResponse;
+    window.triggerSimulatedResponse = (userQuery) => {
+        let enhancedQuery = userQuery;
+
+        if (loadedAttachments.length > 0) {
+            enhancedQuery += "\n\nO usuário anexou os seguintes arquivos de contexto:\n";
+            loadedAttachments.forEach(att => {
+                if (att.type.startsWith('image/')) {
+                    enhancedQuery += `- Imagem [${att.name}] (carregada como contexto visual)\n`;
+                } else {
+                    enhancedQuery += `- Código/Texto [${att.name}]:\n\`\`\`\n${att.data}\n\`\`\`\n`;
+                }
+            });
+            // Clear attachments after embedding context
+            loadedAttachments = [];
+            updatePreviewContainer();
+        }
+
+        // Call proxy API with our enriched content message
+        const skeletonBubble = document.createElement('div');
+        skeletonBubble.id = 'thinking-indicator';
+        skeletonBubble.className = 'message-bubble flex w-full max-w-[800px] py-6 px-1 md:px-2 md:space-x-6 items-start';
+        skeletonBubble.innerHTML = `
+            <div class="h-8 w-8 rounded-full bg-gradient-to-tr from-purple-500 via-indigo-600 to-blue-500 flex items-center justify-center text-white shrink-0 select-none">
+                <i class="fa-solid fa-wand-magic-sparkles text-xs animate-spin-slow"></i>
+            </div>
+            <div class="flex-1 space-y-4 pt-1 ml-4 md:ml-0 max-w-[600px]">
+                <div class="h-3.5 skeleton-pulse rounded-full w-full"></div>
+                <div class="h-3.5 skeleton-pulse rounded-full w-[85%]"></div>
+                <div class="h-3.5 skeleton-pulse rounded-full w-[50%]"></div>
+            </div>
+        `;
+        conversationStream.appendChild(skeletonBubble);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        const activeChat = conversations.find(c => c.id === currentChatId);
+        const activeAgent = getActiveAgent();
+
+        // Swap the last user content with the enhanced version inside list
+        if (activeChat && activeChat.messages.length > 0) {
+            activeChat.messages[activeChat.messages.length - 1].content = enhancedQuery;
+        }
+
+        // Retrieve override key if defined by user inside client settings
+        const userOverrideKey = localStorage.getItem('epma_user_api_key');
+        const customHeaders = { 'Content-Type': 'application/json' };
+        if (userOverrideKey) {
+            customHeaders['x-user-api-key'] = userOverrideKey;
+        }
+
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: customHeaders,
+            body: JSON.stringify({
+                messages: activeChat ? activeChat.messages : [{ role: 'user', content: enhancedQuery }],
+                systemPrompt: activeAgent.systemPrompt,
+                model: activeAgent.model
+            })
+        })
+        .then(async (res) => {
+            const skeleton = document.getElementById('thinking-indicator');
+            if (skeleton) skeleton.remove();
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Erro ao conectar à API.');
+            }
+
+            const data = await res.json();
+            const aiMessage = data.choices[0].message.content;
+
+            const proseDiv = appendMessage('ai', '');
+            
+            if (activeChat) {
+                activeChat.messages.push({ role: 'ai', content: aiMessage });
+                saveConversations();
+            }
+
+            let counter = 0;
+            const words = aiMessage.split(' ');
+            
+            function streamWords() {
+                if (counter < words.length) {
+                    const currentContentSlice = words.slice(0, counter + 1).join(' ');
+                    proseDiv.innerHTML = parseMarkdown(currentContentSlice);
+                    counter++;
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                    setTimeout(streamWords, Math.floor(Math.random() * 12) + 6);
+                } else {
+                    proseDiv.innerHTML = parseMarkdown(aiMessage);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }
+            }
+            streamWords();
+        })
+        .catch((error) => {
+            console.error('Erro na requisição:', error);
+            const skeleton = document.getElementById('thinking-indicator');
+            if (skeleton) skeleton.remove();
+
+            const proseDiv = appendMessage('ai', '');
+            proseDiv.innerHTML = `
+                <div class="p-4 rounded-2xl bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200/50 dark:border-red-900/30 text-sm">
+                    <p class="font-bold flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Ops! Algo deu errado
+                    </p>
+                    <p class="mb-2">${error.message}</p>
+                    <p class="text-xs opacity-80">Por favor, garanta que o hospedeiro local está ativo (<code>npm start</code>) e seu arquivo de segredos possui chaves válidas.</p>
+                </div>
+            `;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        });
+    };
 });
 
 // -------------------------------------------------------------

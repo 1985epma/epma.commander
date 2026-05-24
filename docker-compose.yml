@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # 1. Interface Web do EPMA Commander (Frontend + Proxy Backend)
+  epma-commander:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: epma-commander:latest
+    container_name: epma-commander-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - epma-n8n
+    restart: always
+
+  # 2. Servidor Oficial do n8n (Versão Estável) Integrado
+  epma-n8n:
+    image: n8nio/n8n:stable
+    container_name: epma-n8n-container
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.local/share/n8n
+    restart: always
+
+volumes:
+  n8n_data:

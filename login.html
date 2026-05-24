@@ -66,13 +66,16 @@
 
             <!-- Login Form block -->
             <form id="login-form" class="space-y-4">
+                <div id="error-message" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-500 text-xs font-medium text-center">
+                    Credenciais inválidas. Use <strong class="underline">demo</strong> / <strong class="underline">demo</strong> para acessar.
+                </div>
                 <div>
                     <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-wider">Identificador ou E-mail corporativo</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-purple-400/70">
                             <i class="fa-regular fa-envelope"></i>
                         </span>
-                        <input type="email" required id="login-email" placeholder="usuario@epma.com" class="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-gray-800 dark:text-gray-200" />
+                        <input type="text" required id="login-email" placeholder="demo ou usuario@epma.com" class="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-gray-800 dark:text-gray-200" />
                     </div>
                 </div>
 
@@ -150,6 +153,10 @@
 
     <script>
         const loginForm = document.getElementById('login-form');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const errorMessage = document.getElementById('error-message');
+        
         const btnPasskey = document.getElementById('btn-passkey');
         const btnSso = document.getElementById('btn-sso');
         
@@ -160,8 +167,18 @@
         // Form submit handler
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            // Ir para o chat Commander
-            window.location.href = 'index.html';
+            const username = loginEmail.value.trim().toLowerCase();
+            const password = loginPassword.value.trim();
+
+            if ((username === 'demo' || username === 'demo@epma.com') && password === 'demo') {
+                errorMessage.classList.add('hidden');
+                // Ir para o chat Commander
+                window.location.href = 'index.html';
+            } else {
+                errorMessage.classList.remove('hidden');
+                loginPassword.value = '';
+                loginPassword.focus();
+            }
         });
 
         // SSO Action handler

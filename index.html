@@ -67,10 +67,16 @@
                 <i class="fa-solid fa-plus text-base"></i>
                 <span>Nova conversa</span>
             </button>
-            <button id="btn-manage-agents" class="w-full flex items-center space-x-3 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-purple-950/20 dark:hover:bg-purple-900/30 transition-all rounded-full text-gray-700 dark:text-purple-300 font-medium text-xs border border-gray-300/30 dark:border-purple-800/20">
-                <i class="fa-solid fa-robot text-sm"></i>
-                <span>Gerenciar Agentes (Pro)</span>
-            </button>
+            <div class="grid grid-cols-2 gap-2">
+                <button id="btn-manage-agents" class="w-full flex items-center justify-center space-x-1 px-2 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-purple-950/20 dark:hover:bg-purple-900/30 transition-all rounded-full text-gray-700 dark:text-purple-300 font-medium text-[10px] border border-gray-300/30 dark:border-purple-800/20">
+                    <i class="fa-solid fa-robot text-[10px]"></i>
+                    <span>Agentes (Pro)</span>
+                </button>
+                <button id="btn-automator" class="w-full flex items-center justify-center space-x-1 px-2 py-2.5 bg-gradient-to-r from-purple-600/10 to-indigo-600/10 hover:from-purple-600/20 hover:to-indigo-600/20 dark:bg-purple-950/20 dark:hover:bg-purple-900/30 transition-all rounded-full text-purple-700 dark:text-purple-350 font-bold text-[10px] border border-purple-500/20 dark:border-purple-800/20">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-600 dark:text-purple-400"></i>
+                    <span>Automator n8n</span>
+                </button>
+            </div>
         </div>
 
         <!-- Chat History List -->
@@ -223,27 +229,33 @@
                 <form id="chat-form" class="relative group">
                     <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-focus-within:opacity-80 group-focus-within:duration-200"></div>
                     
-                    <div class="relative bg-gray-100 hover:bg-gray-200/80 dark:bg-[#1e1a2f] dark:hover:bg-[#261f3d] transition-colors rounded-3xl p-3 flex flex-col md:flex-row items-stretch md:items-center space-y-2 md:space-y-0 min-h-[58px] border border-gray-200/60 dark:border-purple-900/40">
-                        <textarea id="prompt-input" rows="1" placeholder="Digite uma pergunta ou instrução aqui..." class="flex-1 bg-transparent border-0 outline-none text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 text-base py-1 px-3 resize-none focus:ring-0 max-h-48 scrollbar-thin overflow-y-auto leading-relaxed" style="min-height: 24px;"></textarea>
+                    <div class="relative bg-gray-100 hover:bg-gray-200/80 dark:bg-[#1e1a2f] dark:hover:bg-[#261f3d] transition-colors rounded-3xl p-3 flex flex-col min-h-[58px] border border-gray-200/60 dark:border-purple-900/40">
+                        <!-- Preview de anexos -->
+                        <div id="attachment-preview-container" class="flex flex-wrap gap-2 px-3 pb-2 hidden border-b border-gray-200/40 dark:border-purple-950/20 mb-2"></div>
                         
-                        <!-- Actions & Send inside input box -->
-                        <div class="flex items-center justify-between md:justify-end space-x-2 pl-3 md:pl-0 pr-1 shrink-0 border-t md:border-t-0 border-gray-200/40 dark:border-purple-950/20 pt-2 md:pt-0">
-                            <!-- Auxiliary inputs -->
-                            <div class="flex items-center space-x-1">
-                                <button type="button" class="btn-input-asset text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Inserir Imagem">
-                                    <i class="fa-regular fa-image text-lg"></i>
-                                </button>
-                                <button type="button" class="btn-input-asset text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Usar Microfone">
-                                    <i class="fa-solid fa-microphone text-lg"></i>
-                                </button>
-                                <button type="button" class="btn-input-asset text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Anexar arquivo">
-                                    <i class="fa-solid fa-paperclip text-lg"></i>
+                        <div class="flex flex-col md:flex-row items-stretch md:items-center space-y-2 md:space-y-0 flex-1">
+                            <textarea id="prompt-input" rows="1" placeholder="Digite uma pergunta ou instrução aqui..." class="flex-1 bg-transparent border-0 outline-none text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 text-base py-1 px-3 resize-none focus:ring-0 max-h-48 scrollbar-thin overflow-y-auto leading-relaxed" style="min-height: 24px;"></textarea>
+                            
+                            <!-- Actions & Send inside input box -->
+                            <div class="flex items-center justify-between md:justify-end space-x-2 pl-3 md:pl-0 pr-1 shrink-0 border-t md:border-t-0 border-gray-200/40 dark:border-purple-950/20 pt-2 md:pt-0">
+                                <!-- Auxiliary inputs -->
+                                <div class="flex items-center space-x-1">
+                                    <input type="file" id="asset-file-input" class="hidden" multiple />
+                                    <button type="button" id="btn-insert-image" class="text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Inserir Imagem">
+                                        <i class="fa-regular fa-image text-lg"></i>
+                                    </button>
+                                    <button type="button" id="btn-use-mic" class="text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Usar Microfone">
+                                        <i class="fa-solid fa-microphone text-lg"></i>
+                                    </button>
+                                    <button type="button" id="btn-attach-file" class="text-indigo-500 dark:text-purple-400 hover:bg-white dark:hover:bg-purple-900/30 p-2.5 rounded-full transition-colors flex items-center justify-center w-10 h-10" title="Anexar arquivo">
+                                        <i class="fa-solid fa-paperclip text-lg"></i>
+                                    </button>
+                                </div>
+                                <!-- Send trigger -->
+                                <button type="submit" id="btn-submit" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white rounded-full p-2.5 transition-all shadow-md flex items-center justify-center w-10 h-10 disabled:opacity-40 disabled:hover:scale-100 hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer" disabled>
+                                    <i class="fa-solid fa-arrow-right text-base"></i>
                                 </button>
                             </div>
-                            <!-- Send trigger -->
-                            <button type="submit" id="btn-submit" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white rounded-full p-2.5 transition-all shadow-md flex items-center justify-center w-10 h-10 disabled:opacity-40 disabled:hover:scale-100 hover:scale-105 active:scale-95 disabled:cursor-not-allowed cursor-pointer" disabled>
-                                <i class="fa-solid fa-arrow-right text-base"></i>
-                            </button>
                         </div>
                     </div>
                 </form>
@@ -306,9 +318,9 @@
                         <div>
                             <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300">Modelo da Novita AI *</label>
                             <select id="form-agent-model" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200">
-                                <option value="meta-llama/llama-3-8b-instruct">meta-llama/llama-3-8b-instruct (Rápido)</option>
-                                <option value="meta-llama/llama-3-70b-instruct">meta-llama/llama-3-70b-instruct (Complexo)</option>
-                                <option value="mistralai/mistral-7b-instruct">mistralai/mistral-7b-instruct (Leve)</option>
+                                <option value="meta-llama/llama-3.1-8b-instruct">meta-llama/llama-3.1-8b-instruct (Rápido)</option>
+                                <option value="meta-llama/llama-3.3-70b-instruct">meta-llama/llama-3.3-70b-instruct (Complexo)</option>
+                                <option value="mistralai/mistral-nemo">mistralai/mistral-nemo (Leve)</option>
                             </select>
                         </div>
                         <div>
@@ -344,6 +356,212 @@
                         <button id="btn-export-yaml" class="px-3.5 py-2 bg-white hover:bg-gray-100 dark:bg-purple-900/30 dark:hover:bg-purple-800/40 border border-gray-200 dark:border-purple-800/20 rounded-xl text-xs font-semibold text-gray-700 dark:text-purple-200 flex items-center gap-1.5 transition-all"><i class="fa-solid fa-file-lines text-orange-500"></i> Exportar em YAML</button>
                         <button id="btn-import-agents" class="px-3.5 py-2 bg-white hover:bg-gray-100 dark:bg-purple-900/30 dark:hover:bg-purple-800/40 border border-gray-200 dark:border-purple-800/20 rounded-xl text-xs font-semibold text-gray-700 dark:text-purple-200 flex items-center gap-1.5 transition-all"><i class="fa-solid fa-file-import text-green-500"></i> Importar Configuração</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Automação Rápida n8n (Automator) -->
+    <div id="automator-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-[#1a1625] w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-purple-900/30 transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            <div class="px-6 py-5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base leading-tight">EPMA Automator n8n</h3>
+                        <p class="text-xs text-purple-100 leading-none">Crie e integre fluxos automaticamente sem tocar em uma linha de código ou abrir o n8n</p>
+                    </div>
+                </div>
+                <button id="btn-close-automator" class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
+                    <i class="fa-solid fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Explicação rápida -->
+                <div class="p-4 rounded-2xl bg-indigo-50/50 dark:bg-purple-950/10 border border-indigo-100/30 dark:border-purple-900/10">
+                    <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                        💡 <strong>Como funciona?</strong> Escreva no campo abaixo o que você deseja automatizar (ex: <i>"Quando eu receber um formulário de lead no Trello envie um aviso no Telegram"</i>). O EPMA Commander irá estruturar o workflow e enviará diretamente para o servidor n8n interno da empresa para você, ativando tudo com 1 clique.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">O que você quer que sua automação faça?</label>
+                        <textarea id="automator-task" rows="3" placeholder="Ex: Toda vez que um novo registro entrar no Google Sheets, envie uma mensagem no Telegram integrando com o EPMA..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200 resize-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">E-mail para Alertas</label>
+                            <input type="email" id="automator-email" value="admin@epma.com" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest font-bold">Servidor n8n Alvo</label>
+                            <span class="block px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-xs text-green-500 font-bold text-center">
+                                <i class="fa-solid fa-circle-dot animate-pulse"></i> EPMA n8n-Instance Integrada
+                            </span>
+                        </div>
+                    </div>
+
+                    <button id="btn-run-automator" class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl text-sm font-bold shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> Criar e Ativar Automação em Segundos
+                    </button>
+                    
+                    <div id="automator-result" class="hidden space-y-4">
+                        <div class="p-4 rounded-2xl bg-green-500/10 border border-green-500/20 text-xs text-green-600 dark:text-green-400 space-y-1">
+                            <p class="font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check text-green-500"></i> Automação implantada com sucesso!
+                            </p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400">O workflow foi carregado e as triggers estão ativas no back-end.</p>
+                        </div>
+                        
+                        <div class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-purple-400">Código gerado (Enviado para n8n)</span>
+                            <div class="bg-gray-950 text-emerald-400 font-mono text-[10px] p-4 rounded-xl border border-white/5 overflow-y-auto max-h-[160px]">
+                                <pre id="automator-code-block" class="whitespace-pre-wrap select-all"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda / Tutorial -->
+    <div id="help-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-[#1a1625] w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-purple-900/30 transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+            <div class="px-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-circle-question text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base leading-tight">Central de Ajuda & Guia</h3>
+                        <p class="text-xs text-blue-100 leading-none">Como operar e extrair o máximo do EPMA Commander</p>
+                    </div>
+                </div>
+                <button id="btn-close-help" class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
+                    <i class="fa-solid fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-5 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">🖥️ O que é o EPMA Commander?</h4>
+                    <p class="text-xs">É a central unificada de IA do ecossistema sg.epma.cloud, utilizando modelos open-source avançados hospedados na Novita AI para engenharia de automação, CI/CD, observabilidade e governança.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">🤖 Alternar Agentes Especialistas</h4>
+                    <p class="text-xs">Clique no botão <strong class="text-indigo-600 dark:text-purple-400">"Gerenciar Agentes (Pro)"</strong> para selecionar comportamentos técnicos dedicados. Temos 13 personas prontas para uso (CISO, SRE, DevOps, DBA, CTO etc.) ou você pode criar sua própria persona.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">📎 Envio de Anexos e Imagens</h4>
+                    <p class="text-xs">Você pode carregar arquivos de imagem (.png, .jpg) ou código/documentos usando o ícone de clipe ou imagem no painel de digitação. Eles serão anexados à sua pergunta para dar contexto técnico adequado ao modelo.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white mb-1">🎙️ Reconhecimento de Voz por Inteligência Artificial</h4>
+                    <p class="text-xs">Use o ícone do microfone para ditar sua pergunta em tempo real. O EPMA Commander transcreve a fala diretamente na sua área de digitação utilizando a API nativa de voz do navegador.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Atividades / Telemetria -->
+    <div id="activities-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-[#1a1625] w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-purple-900/30 transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+            <div class="px-6 py-5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-chart-line text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base leading-tight">Atividades & Logs de Sistema</h3>
+                        <p class="text-xs text-teal-100 leading-none">Métricas de uso local e diagnósticos do barramento</p>
+                    </div>
+                </div>
+                <button id="btn-close-activities" class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
+                    <i class="fa-solid fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="p-3 rounded-2xl bg-gray-50 dark:bg-purple-950/10 border border-gray-100 dark:border-purple-900/10 text-center">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Conversas</p>
+                        <p id="stat-chats" class="text-xl font-black text-indigo-600 dark:text-purple-400 mt-1">0</p>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-gray-50 dark:bg-purple-950/10 border border-gray-100 dark:border-purple-900/10 text-center">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Agentes</p>
+                        <p id="stat-agents" class="text-xl font-black text-indigo-600 dark:text-purple-400 mt-1">13</p>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-gray-50 dark:bg-purple-950/10 border border-gray-100 dark:border-purple-900/10 text-center">
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Erros</p>
+                        <p id="stat-errors" class="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-1">0</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-purple-400 mb-2">📟 Histórico de Logs locais de diagnóstico</h4>
+                    <div class="bg-gray-950 text-emerald-400 font-mono text-[10px] p-4 rounded-xl border border-white/5 space-y-1.5 overflow-y-auto max-h-[220px] select-all leading-relaxed">
+                        <p>[2026-05-24 01:37:12] [SYS] Inicializando EPMA Commander Core v1.0...</p>
+                        <p>[2026-05-24 01:37:13] [SYS] Banco de dados LocalStorage importado.</p>
+                        <p>[2026-05-24 01:37:14] [AUTH] Login validado via portal de segurança corporativo sg.epma.cloud.</p>
+                        <p>[2026-05-24 01:37:15] [API] Canal estável estabelecido em http://localhost:3000.</p>
+                        <p class="text-purple-400">[2026-05-24 01:37:15] [AI] Carregados 13 agentes de engenharia especializados.</p>
+                        <p class="text-emerald-500" id="log-connection-info">[2026-05-24 01:37:16] [SYS] Pronto para receber perguntas operacionais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configurações -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-[#1a1625] w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-purple-900/30 transform scale-95 transition-transform duration-300 flex flex-col max-h-[80vh]">
+            <div class="px-6 py-5 bg-gradient-to-r from-gray-700 to-gray-800 dark:from-purple-950 dark:to-slate-900 text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base leading-tight">Configurações do Sistema</h3>
+                        <p class="text-xs text-gray-300 leading-none">Ajustes locais da API da Novita AI e do modelo</p>
+                    </div>
+                </div>
+                <button id="btn-close-settings" class="text-white/80 hover:text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none">
+                    <i class="fa-solid fa-times text-lg"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-5 text-sm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">Sua Novita API Key (Opcional - Sobrescreve .env)</label>
+                        <input type="password" id="input-api-key" placeholder="Insira sua chave de desenvolvedor (novita_...)" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-gray-800 dark:text-gray-200" />
+                        <p class="text-[10px] text-gray-400 mt-1">Se deixada em branco, usará por padrão a chave configurada pelo administrador em seu arquivo <code>.env</code> corporativo local.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">Motor Llama Padrão</label>
+                            <select id="settings-default-model" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200">
+                                <option value="meta-llama/llama-3.1-8b-instruct">meta-llama/llama-3.1-8b-instruct (Ligeira)</option>
+                                <option value="meta-llama/llama-3.3-70b-instruct">meta-llama/llama-3.3-70b-instruct (Pesada)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">Conexão Backend</label>
+                            <button id="btn-test-connection" class="w-full px-3 py-2 bg-indigo-50 hover:bg-indigo-100 dark:bg-purple-950/20 dark:hover:bg-purple-900/35 border border-indigo-100 dark:border-purple-920/15 rounded-xl text-xs font-bold text-indigo-600 dark:text-purple-300 transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-circle-nodes"></i> Testar Conexão
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="test-connection-result" class="hidden text-xs p-3 rounded-xl"></div>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-100 dark:border-purple-900/20 flex justify-end">
+                    <button id="btn-save-settings" class="px-5 py-2.5 rounded-xl text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold flex items-center gap-1.5 shadow-md shadow-indigo-500/10"><i class="fa-solid fa-floppy-disk"></i> Salvar Preferências</button>
                 </div>
             </div>
         </div>
