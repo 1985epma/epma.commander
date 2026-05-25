@@ -32,19 +32,24 @@
         </div>
 
         <!-- Barra de Progresso/Passos do Wizard -->
-        <div class="flex items-center justify-between max-w-md mx-auto w-full mt-6 relative z-10 shrink-0">
+        <div class="flex items-center justify-between max-w-sm mx-auto w-full mt-6 relative z-10 shrink-0">
             <div class="flex flex-col items-center flex-1 step-header" id="step-header-1">
-                <span class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center border-2 border-indigo-600 shadow-md">1</span>
+                <span class="w-7 h-8 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center border-2 border-indigo-600 shadow-md">1</span>
                 <span class="text-[9px] font-bold text-indigo-600 dark:text-purple-400 uppercase mt-1">Identidade</span>
             </div>
-            <div class="h-0.5 bg-gray-200 dark:bg-purple-950/30 flex-1 mx-2 -mt-4"></div>
+            <div class="h-0.5 bg-gray-200 dark:bg-purple-950/30 flex-1 mx-1.5 -mt-4"></div>
             <div class="flex flex-col items-center flex-1 step-header" id="step-header-2">
-                <span class="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#252037] text-gray-400 dark:text-gray-500 font-bold text-xs flex items-center justify-center border-2 border-transparent">2</span>
+                <span class="w-7 h-8 rounded-full bg-gray-100 dark:bg-[#252037] text-gray-400 dark:text-gray-500 font-bold text-xs flex items-center justify-center border-2 border-transparent">2</span>
                 <span class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase mt-1">Design</span>
             </div>
-            <div class="h-0.5 bg-gray-200 dark:bg-purple-950/30 flex-1 mx-2 -mt-4"></div>
+            <div class="h-0.5 bg-gray-200 dark:bg-purple-950/30 flex-1 mx-1.5 -mt-4"></div>
             <div class="flex flex-col items-center flex-1 step-header" id="step-header-3">
-                <span class="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#252037] text-gray-400 dark:text-gray-500 font-bold text-xs flex items-center justify-center border-2 border-transparent">3</span>
+                <span class="w-7 h-8 rounded-full bg-gray-100 dark:bg-[#252037] text-gray-400 dark:text-gray-500 font-bold text-xs flex items-center justify-center border-2 border-transparent">3</span>
+                <span class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase mt-1">Segurança</span>
+            </div>
+            <div class="h-0.5 bg-gray-200 dark:bg-purple-950/30 flex-1 mx-1.5 -mt-4"></div>
+            <div class="flex flex-col items-center flex-1 step-header" id="step-header-4">
+                <span class="w-7 h-8 rounded-full bg-gray-100 dark:bg-[#252037] text-gray-400 dark:text-gray-500 font-bold text-xs flex items-center justify-center border-2 border-transparent">4</span>
                 <span class="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase mt-1">Concluir</span>
             </div>
         </div>
@@ -118,10 +123,48 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PASSO 3: Geração do Manifesto White-Label -->
+            <!-- PASSO 3: Segurança e Credenciais -->
             <div id="step-body-3" class="wizard-step space-y-4 hidden">
-                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-purple-900/10 pb-2"><i class="fa-solid fa-circle-check text-green-500"></i> Passo 3: Revisão e Geração do Kit</h3>
+                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-purple-900/10 pb-2"><i class="fa-solid fa-shield-halved text-indigo-500"></i> Passo 3: Segurança do Tenant</h3>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5">Usuário Administrador Principal</label>
+                        <input type="text" id="sec-adminUser" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200" placeholder="admin" value="admin" required />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5">Senha de Acesso</label>
+                        <input type="password" id="sec-adminPass" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200" placeholder="••••••••" value="admin123" required />
+                    </div>
+                </div>
+
+                <div class="space-y-3.5 pt-2">
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-gray-50 dark:bg-purple-950/10 border border-gray-150 dark:border-purple-900/15">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-gray-800 dark:text-gray-100">Ativar Single Sign-On (SSO / SAML)</span>
+                            <span class="text-[10px] text-gray-400 dark:text-gray-500">Permitir login via Google Workspace e Azure AD.</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="sec-ssoEnabled" class="sr-only peer" checked>
+                            <div class="w-9 h-5 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-gray-50 dark:bg-purple-950/10 border border-gray-150 dark:border-purple-900/15">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-gray-800 dark:text-gray-100">Autenticação sem Senhas (Passkeys / WebAuthn)</span>
+                            <span class="text-[10px] text-gray-400 dark:text-gray-500">Permitir login rápido por biometria facial, digital ou chave USB.</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="sec-passkeysEnabled" class="sr-only peer" checked>
+                            <div class="w-9 h-5 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- PASSO 3: Geração do Manifesto White-Label -->
+            <div id="step-body-4" class="wizard-step space-y-4 hidden">
+                <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-purple-900/10 pb-2"><i class="fa-solid fa-circle-check text-green-500"></i> Passo 4: Revisão e Geração do Kit</h3>
                 
                 <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
                     Excelente! Nós compilamos o seu manifesto de marca re-brandeado com os novos dados. Você pode revisar nos campos dinâmicos e exportar seu kit customizado JSON.
@@ -138,6 +181,10 @@
                     <p class="text-purple-400">"styling": {</p>
                     <p class="pl-4">"primaryColor": "<span id="preview-primaryColor" class="text-indigo-400">-</span>",</p>
                     <p class="pl-4">"borderRadius": "<span id="preview-borderRadius" class="text-indigo-400">-</span>"</p>
+                    <p class="text-purple-400">},</p>
+                    <p class="text-purple-400">"security": {</p>
+                    <p class="pl-4">"ssoEnabled": "<span id="preview-sso" class="text-indigo-400">-</span>",</p>
+                    <p class="pl-4">"passkeysEnabled": "<span id="preview-passkeys" class="text-indigo-400">-</span>"</p>
                     <p class="text-purple-400">}</p>
                 </div>
             </div>
@@ -159,7 +206,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let currentStep = 1;
-            const totalSteps = 3;
+            const totalSteps = 4;
 
             // DOM Elements
             const prevBtn = document.getElementById('prev-btn');
@@ -179,6 +226,12 @@
             const radiusSelect = document.getElementById('style-borderRadius');
             const themeSelect = document.getElementById('style-theme');
 
+            // Segurança inputs
+            const securityAdminUser = document.getElementById('sec-adminUser');
+            const securityAdminPass = document.getElementById('sec-adminPass');
+            const securitySSOEnabled = document.getElementById('sec-ssoEnabled');
+            const securityPasskeysEnabled = document.getElementById('sec-passkeysEnabled');
+
             // Previews
             const previewCompany = document.getElementById('preview-companyName');
             const previewProduct = document.getElementById('preview-productName');
@@ -186,6 +239,8 @@
             const previewEmail = document.getElementById('preview-supportEmail');
             const previewColor = document.getElementById('preview-primaryColor');
             const previewRadius = document.getElementById('preview-borderRadius');
+            const previewSSO = document.getElementById('preview-sso');
+            const previewPasskeys = document.getElementById('preview-passkeys');
 
             // Sincronizar Color Pickers com inputs de textos
             primaryColorPicker.addEventListener('input', (e) => primaryColorText.value = e.target.value);
@@ -207,6 +262,12 @@
                         secondaryColorPicker.value = data.styling.secondaryColor || '#a855f7';
                         secondaryColorText.value = data.styling.secondaryColor || '#a855f7';
                         radiusSelect.value = data.styling.borderRadius || '1.5rem';
+                        if (data.security) {
+                            securityAdminUser.value = data.security.adminUser || 'admin';
+                            securityAdminPass.value = data.security.adminPass || 'admin123';
+                            securitySSOEnabled.checked = data.security.ssoEnabled !== false;
+                            securityPasskeysEnabled.checked = data.security.passkeysEnabled !== false;
+                        }
                     }
                 })
                 .catch(err => console.warn('Sem dados anteriores carregados. Usando boilerplate default.', err));
@@ -259,60 +320,88 @@
                         previewEmail.textContent = emailInput.value;
                         previewColor.textContent = primaryColorText.value;
                         previewRadius.textContent = radiusSelect.value;
+                        previewSSO.textContent = securitySSOEnabled.checked ? "Ativado" : "Desativado";
+                        previewPasskeys.textContent = securityPasskeysEnabled.checked ? "Ativado" : "Desativado";
                         
                         nextBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Aplicar e Salvar Instantaneamente';
-                    nextBtn.className = "px-6 py-2.5 rounded-xl text-xs bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-1.5 shadow-md shadow-green-500/10 transition-all";
-                }
-                updateProgressUI();
-            } else {
-                // Compila a configuração final
-                const finalWLConfig = {
-                    "brand": {
-                        "companyName": compNameInput.value,
-                        "productName": prodNameInput.value,
-                        "tagline": taglineInput.value,
-                        "logoUrl": "",
-                        "supportEmail": emailInput.value,
-                        "websiteUrl": "https://suaempresa.com.br"
-                    },
-                    "styling": {
-                        "primaryColor": primaryColorText.value,
-                        "secondaryColor": secondaryColorText.value,
-                        "backgroundColorDark": themeSelect.value === "dark" ? "#131118" : "#ffffff",
-                        "backgroundColorLight": "#f3f4f6",
-                        "borderRadius": radiusSelect.value
-                    },
-                    "defaultSettings": {
-                        "defaultModel": "meta-llama/llama-3.1-8b-instruct",
-                        "apiEndpoint": "/api/chat",
-                        "allowedAgents": ["agent_general", "agent_devops", "agent_n8n"]
+                        nextBtn.className = "px-6 py-2.5 rounded-xl text-xs bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-1.5 shadow-md shadow-green-500/10 transition-all";
                     }
-                };
+                    updateProgressUI();
+                } else {
+                    // Compila a configuração final
+                    const finalWLConfig = {
+                        "brand": {
+                            "companyName": compNameInput.value,
+                            "productName": prodNameInput.value,
+                            "tagline": taglineInput.value,
+                            "logoUrl": "",
+                            "supportEmail": emailInput.value,
+                            "websiteUrl": "https://suaempresa.com.br"
+                        },
+                        "styling": {
+                            "primaryColor": primaryColorText.value,
+                            "secondaryColor": secondaryColorText.value,
+                            "backgroundColorDark": themeSelect.value === "dark" ? "#131118" : "#ffffff",
+                            "backgroundColorLight": "#f3f4f6",
+                            "borderRadius": radiusSelect.value
+                        },
+                        "security": {
+                            "adminUser": securityAdminUser.value,
+                            "adminPass": securityAdminPass.value,
+                            "ssoEnabled": securitySSOEnabled.checked,
+                            "passkeysEnabled": securityPasskeysEnabled.checked
+                        },
+                        "defaultSettings": {
+                            "defaultModel": "meta-llama/llama-3.1-8b-instruct",
+                            "apiEndpoint": "/api/chat",
+                            "allowedAgents": ["agent_general", "agent_devops", "agent_n8n"]
+                        }
+                    };
 
-                // Salva alterações localmente no LocalStorage do navegador
-                localStorage.setItem('wl-wizard-config', JSON.stringify(finalWLConfig));
+                    // Salva alterações localmente no LocalStorage do navegador
+                    localStorage.setItem('wl-wizard-config', JSON.stringify(finalWLConfig));
 
-                // Envia a configuração diretamente ao Servidor para salvar o config.json no disco automaticamente
-                fetch('/api/wl/config', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(finalWLConfig)
-                })
-                .then(res => {
-                    if (!res.ok) throw new Error('Não foi possível salvar as configurações no servidor.');
-                    return res.json();
-                })
-                .then(data => {
-                    alert('✔ Configuração aplicada e salva instantaneamente no servidor! Redirecionando para o seu novo painel...');
+                    // Envia a configuração diretamente ao Servidor para salvar o config.json no disco automaticamente
+                    fetch('/api/wl/config', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(finalWLConfig)
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error('Não foi possível salvar as configurações no servidor.');
+                        return res.json();
+                    })
+                    .then(data => {
+                        alert('✔ Configuração do Tenant e Credenciais aplicadas e salvas com sucesso! Redirecionando...');
+                        setTimeout(() => {
+                            window.location.href = '/'; // Redireciona de volta para a raiz do painel
+                        }, 1000);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Nota: Salvamos os dados em cache local se estiver testando estaticamente. Fazendo download do arquivo config.json...');
+                        // Fallback de download nativo do arquivo config.json
+                        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(finalWLConfig, null, 2));
+                        const downloadAnchor = document.createElement('a');
+                        downloadAnchor.setAttribute("href", dataStr);
+                        downloadAnchor.setAttribute("download", "config.json");
+                        document.body.appendChild(downloadAnchor);
+                        downloadAnchor.click();
+                        downloadAnchor.remove();
+                    });
+                }
+            });
                     setTimeout(() => {
                         window.location.href = '/'; // Redireciona de volta para a raiz do painel
                     }, 1000);
                 })
                 .catch(err => {
                     console.error(err);
-                    alert('Erro ao persistir no servidor. Fazendo download do arquivo substituto config.json...');
+                    // O Docker está offline, mas como o Express proxy está rodando via Node.JS local na porta 3000,
+                    // vamos dar um fallback amigável avisando e permitindo o download manual.
+                    alert('Nota: O servidor Docker local está offline, mas salvamos os dados em cache local se estiver testando estaticamente. Fazendo download do arquivo config.json...');
                     // Fallback de download nativo do arquivo config.json
                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(finalWLConfig, null, 2));
                     const downloadAnchor = document.createElement('a');
