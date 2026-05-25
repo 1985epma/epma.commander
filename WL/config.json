@@ -1,0 +1,26 @@
+{
+  "brand": {
+    "companyName": "EPMA Enterprise",
+    "productName": "Commander Pro",
+    "tagline": "Sistemas de Automação Inteligente & Telemetria",
+    "logoUrl": "",
+    "supportEmail": "suporte@suaempresa.com.br",
+    "websiteUrl": "https://suaempresa.com.br"
+  },
+  "styling": {
+    "primaryColor": "#6366f1",
+    "secondaryColor": "#a855f7",
+    "backgroundColorDark": "#131118",
+    "backgroundColorLight": "#f3f4f6",
+    "borderRadius": "1.5rem"
+  },
+  "defaultSettings": {
+    "defaultModel": "meta-llama/llama-3.1-8b-instruct",
+    "apiEndpoint": "/api/chat",
+    "allowedAgents": [
+      "agent_general",
+      "agent_devops",
+      "agent_n8n"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+/* 🏷️ Estilos Globais Customizáveis para White-Label - EPMA Commander */
+
+:root {
+  /* Cores de Marca baseadas no config.json */
+  --wl-primary-color: #6366f1;
+  --wl-secondary-color: #a855f7;
+  --wl-dark-bg: #131118;
+  --wl-light-bg: #f3f4f6;
+  --wl-border-radius: 24px;
+}
+
+/* Aplicação de filtros de marca sobre componentes chave */
+.wl-brand-bg-gradient {
+  background: linear-gradient(135deg, var(--wl-primary-color) 0%, var(--wl-secondary-color) 100%);
+}
+
+.wl-brand-text-gradient {
+  background: linear-gradient(to right, var(--wl-primary-color), var(--wl-secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Customização de botões e cartões no painel */
+.wl-custom-btn {
+  background-color: var(--wl-primary-color);
+  border-radius: var(--wl-border-radius);
+  transition: filter 0.2s ease-in-out;
+}
+
+.wl-custom-btn:hover {
+  filter: brightness(1.1);
+}

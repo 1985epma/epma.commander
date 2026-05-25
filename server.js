@@ -239,6 +239,35 @@ app.post('/api/n8n/workflows', requireAuth, async (req, res) => {
 });
 
 // -------------------------------------------------------------
+// WHITE-LABEL CONFIG ENDPOINTS
+// -------------------------------------------------------------
+const fs = require('fs');
+
+app.get('/api/wl/config', (req, res) => {
+    try {
+        const configPath = path.join(__dirname, 'WL', 'config.json');
+        if (fs.existsSync(configPath)) {
+            const data = fs.readFileSync(configPath, 'utf8');
+            return res.json(JSON.parse(data));
+        }
+        res.status(404).json({ error: 'Configuração White-Label não encontrada.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao ler configuração.' });
+    }
+});
+
+app.post('/api/wl/config', (req, res) => {
+    try {
+        const configPath = path.join(__dirname, 'WL', 'config.json');
+        fs.writeFileSync(configPath, JSON.stringify(req.body, null, 2), 'utf8');
+        res.json({ success: true, message: 'Configuração White-Label salva com sucesso!' });
+    } catch (error) {
+        console.error('Erro ao salvar WL config:', error);
+        res.status(500).json({ error: 'Erro ao salvar configuração.' });
+    }
+});
+
+// -------------------------------------------------------------
 // START
 // -------------------------------------------------------------
 app.listen(PORT, () => {
