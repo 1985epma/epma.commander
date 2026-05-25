@@ -178,11 +178,25 @@
             
             <!-- Default Welcome State (replicates Gemini main dashboard) -->
             <div id="welcome-state" class="w-full max-w-[800px] flex-1 flex flex-col justify-center py-8 space-y-12">
-                <div class="space-y-4">
-                    <h2 class="text-4xl md:text-5xl font-bold tracking-tight">
-                        <span class="bg-gradient-to-r from-blue-500 via-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-text" style="background-size: 200% auto;">Olá, Comandante</span>
-                    </h2>
-                    <h3 class="text-3xl md:text-4xl font-semibold text-gray-400 dark:text-gray-500 leading-tight">Como posso apoiar a sua operação hoje?</h3>
+                <div class="space-y-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div class="space-y-4">
+                        <h2 class="text-4xl md:text-5xl font-bold tracking-tight">
+                            <span class="bg-gradient-to-r from-blue-500 via-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-text" style="background-size: 200% auto;">Olá, Comandante</span>
+                        </h2>
+                        <h3 class="text-3xl md:text-4xl font-semibold text-gray-400 dark:text-gray-500 leading-tight">Como posso apoiar a sua operação hoje?</h3>
+                    </div>
+                    <!-- Seletor de Modelo rápido integrado diretamente à sessão de Nova Conversa para maior acessibilidade -->
+                    <div class="bg-[#f0f4f9] dark:bg-[#1a1625] px-4 py-2.5 rounded-2xl border border-gray-200/50 dark:border-purple-900/10 flex items-center space-x-2.5 shadow-sm max-w-xs shrink-0 self-start md:self-auto hover:border-indigo-500/25 dark:hover:border-purple-500/25 transition-all">
+                        <i class="fa-solid fa-brain text-indigo-500 dark:text-purple-400"></i>
+                        <div class="flex-1">
+                            <span class="text-[9px] font-bold text-gray-400 dark:text-purple-400 uppercase tracking-wider block leading-none mb-0.5">Modelo Ativo</span>
+                            <select id="welcome-model-selector" class="bg-transparent border-0 outline-none text-xs font-semibold text-gray-700 dark:text-gray-200 focus:ring-0 cursor-pointer p-0 pr-6">
+                                <option value="meta-llama/llama-3.1-8b-instruct" class="bg-[#f0f4f9] dark:bg-[#1a1625]">Llama 3.1 8B (Ligeira)</option>
+                                <option value="google/gemma-2-27b-it" class="bg-[#f0f4f9] dark:bg-[#1a1625]">Gemma 2 27B (Google)</option>
+                                <option value="qwen/qwen-best" class="bg-[#f0f4f9] dark:bg-[#1a1625]">Qwen 2.5 72B (Qwen)</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Suggestion Grid Cards -->
@@ -556,10 +570,8 @@
                             <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-widest">Modelo Padrão</label>
                             <select id="settings-default-model" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-purple-900/30 bg-gray-50 dark:bg-purple-950/20 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-200">
                                 <option value="meta-llama/llama-3.1-8b-instruct">meta-llama/llama-3.1-8b-instruct (Ligeira)</option>
-                                <option value="meta-llama/llama-3.3-70b-instruct">meta-llama/llama-3.3-70b-instruct (Pesada)</option>
-                                <option value="google/gemma-4-26b-a4b-it">google/gemma-4-26b-a4b-it (Gemma 4 26B)</option>
-                                <option value="google/gemma-4-31b-it">google/gemma-4-31b-it (Gemma 4 31B)</option>
-                                <option value="qwen/qwen3.7-max">qwen/qwen3.7-max (Qwen3.7 Max)</option>
+                                <option value="google/gemma-2-27b-it">google/gemma-2-27b-it (Gemma 2 27B)</option>
+                                <option value="qwen/qwen-best">qwen/qwen-best (Qwen 2.5 72B)</option>
                             </select>
                         </div>
                         <div>

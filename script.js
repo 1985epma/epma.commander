@@ -330,6 +330,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Form action triggers
     chatForm.addEventListener('submit', handleFormSubmit);
+
+    // Dynamic Select model update based on the newly introduced Welcome Session Dropdown
+    const welcomeModelSelector = document.getElementById('welcome-model-selector');
+    if (welcomeModelSelector) {
+        // Sync with settings default model initially
+        const currentSavedModel = localStorage.getItem('epma_default_model') || 'meta-llama/llama-3.1-8b-instruct';
+        welcomeModelSelector.value = currentSavedModel;
+
+        welcomeModelSelector.addEventListener('change', (e) => {
+            const selectedVal = e.target.value;
+            localStorage.setItem('epma_default_model', selectedVal);
+            
+            // Sync with settings modal input if it exists
+            const settingsDefaultModel = document.getElementById('settings-default-model');
+            if (settingsDefaultModel) {
+                settingsDefaultModel.value = selectedVal;
+            }
+
+            // Sync with current active agent model if applicable
+            const activeAgent = getActiveAgent();
+            if (activeAgent) {
+                activeAgent.model = selectedVal;
+            }
+        });
+    }
     
     // Card suggestions triggers
     cardSuggestions.forEach(card => {
