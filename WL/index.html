@@ -393,26 +393,6 @@
                     });
                 }
             });
-                    setTimeout(() => {
-                        window.location.href = '/'; // Redireciona de volta para a raiz do painel
-                    }, 1000);
-                })
-                .catch(err => {
-                    console.error(err);
-                    // O Docker está offline, mas como o Express proxy está rodando via Node.JS local na porta 3000,
-                    // vamos dar um fallback amigável avisando e permitindo o download manual.
-                    alert('Nota: O servidor Docker local está offline, mas salvamos os dados em cache local se estiver testando estaticamente. Fazendo download do arquivo config.json...');
-                    // Fallback de download nativo do arquivo config.json
-                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(finalWLConfig, null, 2));
-                    const downloadAnchor = document.createElement('a');
-                    downloadAnchor.setAttribute("href", dataStr);
-                    downloadAnchor.setAttribute("download", "config.json");
-                    document.body.appendChild(downloadAnchor);
-                    downloadAnchor.click();
-                    downloadAnchor.remove();
-                });
-            }
-        });
 
             prevBtn.addEventListener('click', () => {
                 if (currentStep > 1) {

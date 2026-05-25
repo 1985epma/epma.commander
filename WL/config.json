@@ -1,6 +1,6 @@
 {
   "brand": {
-    "companyName": "EPMA Enterprise",
+    "companyName": "EPMA health",
     "productName": "EPMA ",
     "tagline": "Sistemas de Automação Inteligente & Telemetria",
     "logoUrl": "",
@@ -13,6 +13,12 @@
     "backgroundColorDark": "#ffffff",
     "backgroundColorLight": "#f3f4f6",
     "borderRadius": "1rem"
+  },
+  "security": {
+    "adminUser": "admin",
+    "adminPass": "admin",
+    "ssoEnabled": true,
+    "passkeysEnabled": true
   },
   "defaultSettings": {
     "defaultModel": "meta-llama/llama-3.1-8b-instruct",
