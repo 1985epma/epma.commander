@@ -1,6 +1,46 @@
+// -------------------------------------------------------------
+// AUTH GUARD — redireciona para login se não autenticado
+// -------------------------------------------------------------
+(function checkAuth() {
+    if (!localStorage.getItem('epma_jwt')) {
+        window.location.href = 'login.html';
+    }
+})();
+
+function getAuthHeaders() {
+    const token = localStorage.getItem('epma_jwt');
+    return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+}
+
+async function apiRequest(method, url, body) {
+    const res = await fetch(url, {
+        method,
+        headers: getAuthHeaders(),
+        body: body ? JSON.stringify(body) : undefined
+    });
+    if (res.status === 401) {
+        localStorage.removeItem('epma_jwt');
+        window.location.href = 'login.html';
+        return;
+    }
+    return res;
+}
+
 // Conversation storage structures
-let conversations = JSON.parse(localStorage.getItem('epma_chats')) || [];
+let conversations = [];
 let currentChatId = null;
+
+async function loadConversationsFromServer() {
+    try {
+        const res = await apiRequest('GET', '/api/conversations');
+        if (res && res.ok) {
+            conversations = await res.json();
+            renderHistory();
+        }
+    } catch (e) {
+        console.error('Erro ao carregar conversas:', e);
+    }
+}
 
 // Agents Storage / Configuration list (Extensiva com papéis especialistas corporativos do EPMA Commander)
 const defaultAgents = [
@@ -126,8 +166,21 @@ const defaultAgents = [
     }
 ];
 
-let customAgents = JSON.parse(localStorage.getItem('epma_custom_agents')) || [];
+let customAgents = [];
 let activeAgentId = localStorage.getItem('epma_active_agent_id') || 'agent_general';
+
+async function loadAgentsFromServer() {
+    try {
+        const res = await apiRequest('GET', '/api/agents');
+        if (res && res.ok) {
+            customAgents = await res.json();
+            renderModalAgentsList();
+            renderActiveAgentBanner();
+        }
+    } catch (e) {
+        console.error('Erro ao carregar agentes:', e);
+    }
+}
 
 function getActiveAgent() {
     const all = [...defaultAgents, ...customAgents];
@@ -254,15 +307,16 @@ const disclaimer = document.getElementById('disclaimer');
 // -------------------------------------------------------------
 // EVENT LISTENERS & LIFECYCLE
 // -------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Initial theme detection and application
     initTheme();
-    
+
     // Initialize Agents Banner and list
     renderActiveAgentBanner();
 
-    // Render stored chat history inside the sidebar
-    renderHistory();
+    // Carregar dados do servidor
+    await Promise.all([loadConversationsFromServer(), loadAgentsFromServer()]);
+
     // Check if there are active chats, if so, load the most recent, else start empty welcome state
     if (conversations.length > 0) {
          // Auto-load most recent chat
@@ -344,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
             systemPrompt: document.getElementById('form-agent-system').value.trim()
         };
         customAgents.push(newAgent);
-        localStorage.setItem('epma_custom_agents', JSON.stringify(customAgents));
+        apiRequest('POST', '/api/agents', newAgent).catch(e => console.error('Erro ao salvar agente:', e));
         agentForm.reset();
         
         renderModalAgentsList();
@@ -529,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implantar diretamente na API Real do n8n através do backend proxy
         fetch('/api/n8n/workflows', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(generatedWorkflow)
         })
         .then(async (res) => {
@@ -644,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetch('/api/chat', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({
                 messages: [{ role: 'user', content: 'ping' }],
                 systemPrompt: 'Responda apenas "pong"',
@@ -852,9 +906,8 @@ document.addEventListener('DOMContentLoaded', () => {
             activeChat.messages[activeChat.messages.length - 1].content = enhancedQuery;
         }
 
-        // Retrieve override key if defined by user inside client settings
         const userOverrideKey = localStorage.getItem('epma_user_api_key');
-        const customHeaders = { 'Content-Type': 'application/json' };
+        const customHeaders = getAuthHeaders();
         if (userOverrideKey) {
             customHeaders['x-user-api-key'] = userOverrideKey;
         }
@@ -951,7 +1004,7 @@ function selectAgent(id) {
 function deleteCustomAgent(id) {
     if (confirm('Tem certeza que deseja excluir esta persona de agente?')) {
         customAgents = customAgents.filter(a => a.id !== id);
-        localStorage.setItem('epma_custom_agents', JSON.stringify(customAgents));
+        apiRequest('DELETE', `/api/agents/${id}`).catch(e => console.error('Erro ao deletar agente:', e));
         if (activeAgentId === id) {
             activeAgentId = 'agent_general';
             localStorage.setItem('epma_active_agent_id', 'agent_general');
@@ -1121,7 +1174,7 @@ function handleFormSubmit(e) {
             messages: []
         };
         conversations.unshift(newChat);
-        saveConversations();
+        createConversationOnServer(newChat);
         renderHistory();
     }
     
@@ -1205,11 +1258,13 @@ function triggerSimulatedResponse(userQuery) {
     // Request the proxy backend
     const activeAgent = getActiveAgent();
     
+    const chatApiHeaders = getAuthHeaders();
+    const chatUserKey = localStorage.getItem('epma_user_api_key');
+    if (chatUserKey) chatApiHeaders['x-user-api-key'] = chatUserKey;
+
     fetch('/api/chat', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: chatApiHeaders,
         body: JSON.stringify({
             messages: activeChat.messages,
             systemPrompt: activeAgent.systemPrompt,
@@ -1388,18 +1443,35 @@ function loadChat(id) {
     }
 }
 
-function deleteChat(id) {
+async function deleteChat(id) {
     conversations = conversations.filter(c => c.id !== id);
-    saveConversations();
     renderHistory();
-    
+    try {
+        await apiRequest('DELETE', `/api/conversations/${id}`);
+    } catch (e) {
+        console.error('Erro ao deletar conversa:', e);
+    }
     if (currentChatId === id) {
         startNewConversation(true);
     }
 }
 
-function saveConversations() {
-    localStorage.setItem('epma_chats', JSON.stringify(conversations));
+async function saveConversations() {
+    const chat = conversations.find(c => c.id === currentChatId);
+    if (!chat) return;
+    try {
+        await apiRequest('PUT', `/api/conversations/${chat.id}`, { title: chat.title, messages: chat.messages });
+    } catch (e) {
+        console.error('Erro ao salvar conversa:', e);
+    }
+}
+
+async function createConversationOnServer(chat) {
+    try {
+        await apiRequest('POST', '/api/conversations', { id: chat.id, title: chat.title, messages: chat.messages });
+    } catch (e) {
+        console.error('Erro ao criar conversa:', e);
+    }
 }
 
 // -------------------------------------------------------------

@@ -67,7 +67,7 @@
             <!-- Login Form block -->
             <form id="login-form" class="space-y-4">
                 <div id="error-message" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-500 text-xs font-medium text-center">
-                    Credenciais inválidas. Use <strong class="underline">demo</strong> / <strong class="underline">demo</strong> para acessar.
+                    Credenciais inválidas.
                 </div>
                 <div>
                     <label class="block text-xs font-semibold mb-1.5 text-gray-600 dark:text-gray-300 uppercase tracking-wider">Identificador ou E-mail corporativo</label>
@@ -152,42 +152,68 @@
     </div>
 
     <script>
+        // Redirecionar se já autenticado
+        if (localStorage.getItem('epma_jwt')) {
+            window.location.href = 'index.html';
+        }
+
         const loginForm = document.getElementById('login-form');
         const loginEmail = document.getElementById('login-email');
         const loginPassword = document.getElementById('login-password');
         const errorMessage = document.getElementById('error-message');
-        
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
+
         const btnPasskey = document.getElementById('btn-passkey');
         const btnSso = document.getElementById('btn-sso');
-        
+
         const passkeyOverlay = document.getElementById('passkey-overlay');
         const btnPasskeySimulate = document.getElementById('btn-passkey-simulate');
         const btnPasskeyCancel = document.getElementById('btn-passkey-cancel');
 
-        // Form submit handler
-        loginForm.addEventListener('submit', (e) => {
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.classList.remove('hidden');
+            loginPassword.value = '';
+            loginPassword.focus();
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = loginEmail.value.trim().toLowerCase();
+            const username = loginEmail.value.trim();
             const password = loginPassword.value.trim();
 
-            if ((username === 'demo' || username === 'demo@epma.com') && password === 'demo') {
-                errorMessage.classList.add('hidden');
-                // Ir para o chat Commander
-                window.location.href = 'index.html';
-            } else {
-                errorMessage.classList.remove('hidden');
-                loginPassword.value = '';
-                loginPassword.focus();
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Autenticando...';
+            errorMessage.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showError(data.error || 'Credenciais inválidas.');
+                } else {
+                    localStorage.setItem('epma_jwt', data.token);
+                    localStorage.setItem('epma_username', data.username);
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                showError('Erro ao conectar ao servidor. Tente novamente.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Entrar no Commander</span><i class="fa-solid fa-arrow-right text-xs"></i>';
             }
         });
 
-        // SSO Action handler
         btnSso.addEventListener('click', () => {
-            alert('Redirecionando com segurança para a central de autorizações do sg.epma.cloud SSO...');
-            window.location.href = 'index.html';
+            showError('SSO corporativo não configurado neste ambiente.');
         });
 
-        // Passkey dialog simulation
         btnPasskey.addEventListener('click', () => {
             passkeyOverlay.classList.remove('hidden');
             setTimeout(() => {
@@ -199,16 +225,19 @@
         const dismissPasskey = () => {
             passkeyOverlay.classList.add('opacity-0');
             passkeyOverlay.querySelector('.transform').classList.add('scale-95');
-            setTimeout(() => {
-                passkeyOverlay.classList.add('hidden');
-            }, 300);
+            setTimeout(() => passkeyOverlay.classList.add('hidden'), 300);
         };
 
         btnPasskeyCancel.addEventListener('click', dismissPasskey);
-        
-        btnPasskeySimulate.addEventListener('click', () => {
+
+        // Passkey real via WebAuthn (fallback para mensagem se não suportado)
+        btnPasskeySimulate.addEventListener('click', async () => {
             dismissPasskey();
-            window.location.href = 'index.html';
+            if (!window.PublicKeyCredential) {
+                showError('Passkey não suportada neste navegador.');
+                return;
+            }
+            showError('Passkey corporativa não configurada neste ambiente.');
         });
     </script>
 </body>
